@@ -3,7 +3,7 @@ package com.example.maxime.dto;
 import lombok.Data;
 
 @Data
-public class LieuxDto {
+public class AvengersDto {
 
     Long id;
 
@@ -11,7 +11,6 @@ public class LieuxDto {
 
     String image;
 
-    String ville;
+    String description;
 
-    String pays;
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Lieux {
+public class Avengers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,5 @@ public class Lieux {
     String image;
 
     @Column
-    String ville;
-
-    @Column
-    String pays;
+    String description;
 }
