@@ -21,4 +21,7 @@ public class Avengers {
 
     @Column
     String description;
+
+    @Column
+    String acteur;
 }

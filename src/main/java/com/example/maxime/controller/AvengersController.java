@@ -11,11 +11,11 @@ import java.util.Collection;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/lieux")
+@RequestMapping("/avengers")
 public class AvengersController {
 
     @Autowired
     AvengersService avengersService;
 
-    public Collection<AvengersDto> getAllLocations() { return avengersService.getAll(); };
+    public Collection<AvengersDto> getAllAvengers() { return avengersService.getAll(); };
 }
