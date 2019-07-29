@@ -1,7 +1,7 @@
 package com.example.maxime.controller;
 
-import com.example.maxime.dto.AvengersDto;
-import com.example.maxime.service.AvengersService;
+import com.example.maxime.dto.MechantsDto;
+import com.example.maxime.service.MechantsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +12,13 @@ import java.util.Collection;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/avengers")
-public class AvengersController {
+@RequestMapping("/mechants")
+public class MechantsController {
 
     @Autowired
-    AvengersService avengersService;
+    MechantsService mechantsService;
 
     @GetMapping
-    public Collection<AvengersDto> getAllAvengers() { return avengersService.getAll(); };
+    public Collection<MechantsDto> getAllEnnemies() { return mechantsService.getEnnemies(); };
+
 }
