@@ -7,15 +7,15 @@ public class FilmsDto {
 
     Long id;
 
-    String nom;
+    String name;
 
     String image;
 
-    String acteur1;
+    String actor1;
 
-    String acteur2;
+    String actor2;
 
-    String annee;
+    String year;
 
     String synopsis;
 }

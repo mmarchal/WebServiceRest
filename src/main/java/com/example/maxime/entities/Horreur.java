@@ -1,11 +1,12 @@
 package com.example.maxime.entities;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "FILMS")
+@Table(name = "HORREUR")
 @AttributeOverrides({
         @AttributeOverride(name = "id", column = @Column(name = "ID")),
         @AttributeOverride(name = "nom", column = @Column(name = "NOM")),
@@ -15,5 +16,5 @@ import javax.persistence.*;
         @AttributeOverride(name = "annee", column = @Column(name = "ANNEE")),
         @AttributeOverride(name = "synopsis", column = @Column(name = "SYNOPSIS")),
 })
-public class Films  extends ModeleF {
+public class Horreur extends ModeleF {
 }
