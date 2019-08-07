@@ -13,7 +13,7 @@ import javax.persistence.*;
         @AttributeOverride(name = "acteur1", column = @Column(name = "ACTEUR1")),
         @AttributeOverride(name = "acteur2", column = @Column(name = "ACTEUR2")),
         @AttributeOverride(name = "annee", column = @Column(name = "ANNEE")),
-        @AttributeOverride(name = "synopsis", column = @Column(name = "SYNOPSIS")),
+        @AttributeOverride(name = "synopsis", column = @Column(name = "SYNOPSIS", length = 1023)),
 })
 public class Films  extends ModeleF {
 }
