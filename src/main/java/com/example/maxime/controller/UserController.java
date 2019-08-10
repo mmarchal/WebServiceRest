@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -23,5 +24,10 @@ public class UserController {
     @PostMapping
     public boolean createUser(@RequestBody UserDto user){
         return this.userService.createUser(user);
+    }
+
+    @GetMapping("/database")
+    public List getAllDatabasesNames() {
+        return this.userService.databasesNames();
     }
 }
