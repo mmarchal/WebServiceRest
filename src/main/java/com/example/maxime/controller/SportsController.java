@@ -1,7 +1,7 @@
 package com.example.maxime.controller;
 
-import com.example.maxime.dto.ActeursDto;
-import com.example.maxime.service.ActeursService;
+import com.example.maxime.dto.SportsDto;
+import com.example.maxime.service.SportsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/acteurs")
-public class ActeursController {
+@RequestMapping("/sports")
+public class SportsController {
 
     @Autowired
-    ActeursService acteursService;
+    SportsService sportsService;
 
     @GetMapping
-    public Collection<ActeursDto> getAllActors() { return acteursService.getActors(); }
+    public Collection<SportsDto> getAllAvengers() { return sportsService.getAllSports(); };
 }

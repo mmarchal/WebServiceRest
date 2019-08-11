@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -15,7 +16,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping()
+    @GetMapping
     public Collection<UserDto> getUsers(){
         return this.userService.getAll();
     }
@@ -24,4 +25,5 @@ public class UserController {
     public boolean createUser(@RequestBody UserDto user){
         return this.userService.createUser(user);
     }
+
 }

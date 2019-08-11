@@ -4,10 +4,10 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
 @Entity
-public class Acteurs {
-
+@Data
+@Table(name = "SPORTS")
+public class Sports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -18,10 +18,4 @@ public class Acteurs {
 
     @Column
     String image;
-
-    @Column
-    String film1;
-
-    @Column
-    String film2;
 }
