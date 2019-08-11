@@ -26,4 +26,8 @@ public class UserController {
         return this.userService.createUser(user);
     }
 
+    @GetMapping("/database")
+    public List getAllDatabasesNames() {
+        return this.userService.databasesNames();
+    }
 }

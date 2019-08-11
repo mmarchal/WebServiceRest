@@ -49,4 +49,8 @@ public class UserService implements UserDetailsService {
         this.userRepo.save(this.userConverter.dtoToEntity(user,User.class));
         return true;
     }
+
+    public List databasesNames() {
+        return this.userRepo.allNames();
+    }
 }
