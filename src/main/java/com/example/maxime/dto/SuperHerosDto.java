@@ -3,7 +3,7 @@ package com.example.maxime.dto;
 import lombok.Data;
 
 @Data
-public class SagaDto {
+public class SuperHerosDto {
 
     Long id;
 
@@ -11,7 +11,6 @@ public class SagaDto {
 
     String image;
 
-    String nombreFilms;
+    String pouvoir;
 
-    String contenu;
 }

@@ -20,9 +20,9 @@ public class Saga {
     String image;
 
     @Column
-    int nombreFilms;
+    String nombreFilms;
 
-    @Column(length = 1023)
+    @Column(length = 2047)
     String contenu;
 
 }
