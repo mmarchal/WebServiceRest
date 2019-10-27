@@ -16,7 +16,7 @@ import java.util.Collection;
 public class SuperHerosController {
 
     @Autowired
-    SuperHerosService superHerosService;
+    private SuperHerosService superHerosService;
 
     @GetMapping
     public Collection<SuperHerosDto> getAllSongs() {
