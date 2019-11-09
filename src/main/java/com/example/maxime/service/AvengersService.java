@@ -20,5 +20,5 @@ public class AvengersService {
 
     public Collection<AvengersDto> getAll() {
       return genericConverter.entitiesToDtos(avengersRepository.findAll(), AvengersDto.class);
-    };
+    }
 }
