@@ -30,4 +30,15 @@ public class UserController {
     public List getAllDatabasesNames() {
         return this.userService.databasesNames();
     }
+
+    @PostMapping
+    public boolean synchroActeurs(){
+        try {
+            this.userService.synchro();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 }

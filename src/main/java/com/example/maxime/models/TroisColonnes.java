@@ -1,4 +1,4 @@
-package com.example.maxime.entities;
+package com.example.maxime.models;
 
 import lombok.Data;
 
@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Data
-public abstract class ModeleS {
+public abstract class TroisColonnes {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,9 +19,7 @@ public abstract class ModeleS {
     @Column(name = "image")
     String image;
 
-    @Column(name = "anneeDebut")
-    String anneeDebut;
+    @Column(name = "colonne1")
+    String colonne1;
 
-    @Column(name = "anneeFin")
-    String anneeFin;
 }
