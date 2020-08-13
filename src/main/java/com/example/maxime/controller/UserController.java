@@ -5,6 +5,7 @@ import com.example.maxime.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class UserController {
         return this.userService.databasesNames();
     }
 
-    @PostMapping
-    public boolean synchroActeurs(){
+    @PostMapping("/synchroData")
+    public boolean synchroData() {
         try {
             this.userService.synchro();
             return true;

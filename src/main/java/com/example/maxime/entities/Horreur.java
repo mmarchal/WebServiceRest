@@ -1,5 +1,6 @@
 package com.example.maxime.entities;
 
+import com.example.maxime.models.SixColonnes;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,10 +12,10 @@ import javax.persistence.*;
         @AttributeOverride(name = "id", column = @Column(name = "ID")),
         @AttributeOverride(name = "nom", column = @Column(name = "NOM")),
         @AttributeOverride(name = "image", column = @Column(name = "IMAGE")),
-        @AttributeOverride(name = "acteur1", column = @Column(name = "ACTEUR1")),
-        @AttributeOverride(name = "acteur2", column = @Column(name = "ACTEUR2")),
-        @AttributeOverride(name = "annee", column = @Column(name = "ANNEE")),
-        @AttributeOverride(name = "synopsis", column = @Column(name = "SYNOPSIS", length = 1023)),
+        @AttributeOverride(name = "colonne1", column = @Column(name = "ACTEUR1")),
+        @AttributeOverride(name = "colonne2", column = @Column(name = "ACTEUR2")),
+        @AttributeOverride(name = "colonne3", column = @Column(name = "ANNEE")),
+        @AttributeOverride(name = "colonne4", column = @Column(name = "SYNOPSIS", length = 1023)),
 })
-public class Horreur extends ModeleF {
+public class Horreur extends SixColonnes {
 }

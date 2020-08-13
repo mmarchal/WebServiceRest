@@ -13,7 +13,7 @@ import javax.persistence.*;
         @AttributeOverride(name = "nom", column = @Column(name = "NOM")),
         @AttributeOverride(name = "image", column = @Column(name = "IMAGE")),
         @AttributeOverride(name = "colonne1", column = @Column(name = "FILM1")),
-        @AttributeOverride(name = "colonne1", column = @Column(name = "FILM2")),
+        @AttributeOverride(name = "colonne2", column = @Column(name = "FILM2")),
 })
 public class Acteurs extends QuatreColonnes {
 

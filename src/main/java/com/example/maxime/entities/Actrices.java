@@ -1,5 +1,7 @@
 package com.example.maxime.entities;
 
+import com.example.maxime.models.CinqColonnes;
+import com.example.maxime.models.QuatreColonnes;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,8 +14,8 @@ import javax.persistence.*;
         @AttributeOverride(name = "nom", column = @Column(name = "NOM")),
         @AttributeOverride(name = "image", column = @Column(name = "IMAGE")),
         @AttributeOverride(name = "colonne1", column = @Column(name = "FILM1")),
-        @AttributeOverride(name = "colonne1", column = @Column(name = "FILM2")),
+        @AttributeOverride(name = "colonne2", column = @Column(name = "FILM2")),
 })
-public class Actrices {
+public class Actrices extends QuatreColonnes {
 
 }

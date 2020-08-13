@@ -1,10 +1,15 @@
 package com.example.maxime.service;
 
 import com.example.maxime.converter.GenericConverter;
+import com.example.maxime.dto.JeuxDto;
+import com.example.maxime.dto.RappeursDto;
+import com.example.maxime.dto.SportsDto;
 import com.example.maxime.dto.UserDto;
 import com.example.maxime.entities.Acteurs;
+import com.example.maxime.entities.Jeux;
 import com.example.maxime.entities.Sports;
 import com.example.maxime.entities.User;
+import com.example.maxime.repository.JeuxRepository;
 import com.example.maxime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,6 +33,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     GenericConverter<User, UserDto> userConverter;
+
+    @Autowired
+    JeuxRepository jeuxRepository;
 
     @Override
     public UserDetails loadUserByUsername(final String mail) throws UsernameNotFoundException {
@@ -58,48 +66,104 @@ public class UserService implements UserDetailsService {
         return this.userRepo.allNames();
     }
 
-    public void synchro() throws IOException {
+    public void synchro() {
 
         Map<String, Resource> hm  = new HashMap<String, Resource>() {{
-            put("acteurs", new ClassPathResource("fichiersSynchro/acteurs.csv"));
-            put("actrises", new ClassPathResource("fichiersSynchro/actrises.csv"));
+            /*put("acteurs", new ClassPathResource("fichiersSynchro/acteurs.csv"));
+            put("actrices", new ClassPathResource("fichiersSynchro/actrices.csv"));
             put("avengers", new ClassPathResource("fichiersSynchro/avengers.csv"));
             put("chansons", new ClassPathResource("fichiersSynchro/chansons.csv"));
             put("dessinsanimes", new ClassPathResource("fichiersSynchro/dessinsanimes.csv"));
             put("films", new ClassPathResource("fichiersSynchro/films.csv"));
-            put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));
+            put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));*/
             put("jeux", new ClassPathResource("fichiersSynchro/jeux.csv"));
-            put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
+            /*put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
             put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
             put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
             put("sagas", new ClassPathResource("fichiersSynchro/sagas.csv"));
             put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
             put("series", new ClassPathResource("fichiersSynchro/series.csv"));
             put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
-            put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));
+            put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));*/
         }};
 
         for(Map.Entry<String, Resource> entry : hm.entrySet()) {
-            this.lectureData(entry.getKey(), entry.getValue());
+
+            String nom = entry.getKey();
+            File file = new File("");
+            try {
+                file = entry.getValue().getFile();
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+            }
+
+            if(nom.matches("jeux|rappeurs|sports")) {
+                this.insertTwoDatas(file);
+            } else if ("chansons|mechants|superheros".matches(nom)) {
+                this.insertThreeDatas(file);
+            } else if ("acteurs|actrices|avengers|sagas|series|seriesanimes".matches(nom)) {
+                this.insertFourDatas(file);
+            } else if ("dessinsanimes|realisateurs".matches(nom)) {
+                this.insertFiveDatas(file);
+            } else {
+                this.insertSixDatas(file);
+            }
+
         }
+    }
 
-        Resource resource = new ClassPathResource("fichiersSynchro/acteurs.csv");
+    private void insertSixDatas(File file) {
+    }
 
-        File file = resource.getFile();
+    private void insertFiveDatas(File file) {
+    }
 
-        ArrayList<Acteurs> listeBDD = new ArrayList<>();
+    private void insertFourDatas(File file) {
+    }
 
+    private void insertThreeDatas(File file) {
+    }
+
+    private void insertTwoDatas(File file) {
 
         try {
 
             Scanner myReader = new Scanner(file);
+
+            System.out.println(myReader.hasNextLine());
+
             while (myReader.hasNextLine()) {
 
                 String data = myReader.nextLine();
-                List<String> listeActeurs = Arrays.asList(data.split(";"));
+                List<String> list = Arrays.asList(data.split(";"));
+
+                if(!list.get(0).matches("Nom")) {
+                    if(file.getName().contains("jeux")) {
+
+                        Jeux jeu = new Jeux();
+                        jeu.setNom(list.get(0));
+
+                        if(list.get(1).isEmpty() || list.get(1).equals("")) {
+                            String image = (list.get(0).toLowerCase().replace(" ", "")) + ".png";
+                            jeu.setImage(image);
+                        } else {
+                            jeu.setImage(list.get(1));
+                        }
+
+                        jeuxRepository.save(jeu);
+
+                    } else if (file.getName().contains("rappeurs")) {
 
 
-                if(listeActeurs.size()==3 && !listeActeurs.get(0).matches("Nom")) {
+
+                    } else {
+
+
+
+                    }
+                }
+
+                /*if(list.get(0).matches("Nom")) {
 
                     String nom = listeActeurs.get(0);
                     int longueur = listeActeurs.get(0).split(" ").length;
@@ -107,39 +171,19 @@ public class UserService implements UserDetailsService {
                     String film1 = listeActeurs.get(1);
                     String film2 = listeActeurs.get(2);
 
-                    Acteurs acteur = new Acteurs();
-                    acteur.setNom(nom);
-                    acteur.setImage("acteurs/" + image + ".png");
-                    acteur.setFilm1(film1);
-                    acteur.setFilm2(film2);
-
-                    listeBDD.add(acteur);
-
-                }
+                }*/
 
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
-        listeBDD.forEach((e) -> {
-            System.out.println("ENREGISTREMENT DE L'ACTEUR " + e.getNom() + " EN COURS !");
-            try {
-                acteursRepository.save(e);
-                System.out.println("ENREGISTREMENT DE L'ACTEUR " + e.getNom() + " OK !");
-            } catch (Exception e1) {
-                System.out.println("ERREUR DANS L'ENREGISTREMENT DE L'ACTEUR " + e.getNom() + " : " + e1.getMessage());
-            }
-        });
 
     }
 
+
     private void lectureData(String key, Resource value) throws IOException {
 
-        File file = value.getFile();
-        
-        try {
+        /*try {
 
             Scanner myReader = new Scanner(file);
             while (myReader.hasNextLine()) {
@@ -159,7 +203,7 @@ public class UserService implements UserDetailsService {
                     Acteurs acteur = new Acteurs();
                     acteur.setNom(nom);
                     acteur.setImage("acteurs/" + image + ".png");
-                    acteur.setFilm1(film1);
+                    /*acteur.setFilm1(film1);
                     acteur.setFilm2(film2);
 
                     listeBDD.add(acteur);
@@ -170,7 +214,7 @@ public class UserService implements UserDetailsService {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 }

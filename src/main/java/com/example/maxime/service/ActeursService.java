@@ -36,8 +36,8 @@ public class ActeursService {
 
         a.setNom(acteur.getNom());
         a.setImage(acteur.getImage());
-        a.setFilm1(acteur.getFilm1());
-        a.setFilm2(acteur.getFilm2());
+        a.setColonne1(acteur.getFilm1());
+        a.setColonne2(acteur.getFilm2());
 
         this.acteursRepository.save(a);
 

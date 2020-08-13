@@ -1,21 +1,18 @@
 package com.example.maxime.entities;
 
+import com.example.maxime.models.DeuxColonnes;
 import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
 @Entity
-public class Rappeurs {
+@Data
+@Table(name = "RAPPEURS")
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "ID")),
+        @AttributeOverride(name = "nom", column = @Column(name = "NOM")),
+        @AttributeOverride(name = "image", column = @Column(name = "IMAGE")),
+})
+public class Rappeurs extends DeuxColonnes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    Long id;
-
-    @Column
-    String nom;
-
-    @Column
-    String image;
 }

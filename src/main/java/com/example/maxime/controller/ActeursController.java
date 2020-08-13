@@ -23,7 +23,7 @@ public class ActeursController {
     @PostMapping
     public boolean synchroActeurs(){
         try {
-            this.acteursService.synchro();
+            //this.acteursService.synchro();
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
