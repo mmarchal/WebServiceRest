@@ -5,12 +5,10 @@ import com.example.maxime.dto.JeuxDto;
 import com.example.maxime.dto.RappeursDto;
 import com.example.maxime.dto.SportsDto;
 import com.example.maxime.dto.UserDto;
-import com.example.maxime.entities.Acteurs;
-import com.example.maxime.entities.Jeux;
-import com.example.maxime.entities.Sports;
-import com.example.maxime.entities.User;
-import com.example.maxime.repository.JeuxRepository;
-import com.example.maxime.repository.UserRepository;
+import com.example.maxime.entities.*;
+import com.example.maxime.models.DeuxColonnes;
+import com.example.maxime.models.QuatreColonnes;
+import com.example.maxime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -21,9 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service(value = "userService")
 public class UserService implements UserDetailsService {
@@ -36,6 +35,21 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     JeuxRepository jeuxRepository;
+
+    @Autowired
+    ActeursRepository acteursRepository;
+    @Autowired
+    ActricesRepository actricesRepository;
+    @Autowired
+    AvengersRepository avengersRepository;
+    @Autowired
+    SagaRepository sagaRepository;
+
+    Logger logger = Logger.getLogger("logger");
+
+    BufferedReader br = null;
+    String line = "";
+    String cvsSplitBy = ";";
 
     @Override
     public UserDetails loadUserByUsername(final String mail) throws UsernameNotFoundException {
@@ -69,22 +83,22 @@ public class UserService implements UserDetailsService {
     public void synchro() {
 
         Map<String, Resource> hm  = new HashMap<String, Resource>() {{
-            /*put("acteurs", new ClassPathResource("fichiersSynchro/acteurs.csv"));
+            put("acteurs", new ClassPathResource("fichiersSynchro/acteurs.csv"));
             put("actrices", new ClassPathResource("fichiersSynchro/actrices.csv"));
             put("avengers", new ClassPathResource("fichiersSynchro/avengers.csv"));
-            put("chansons", new ClassPathResource("fichiersSynchro/chansons.csv"));
-            put("dessinsanimes", new ClassPathResource("fichiersSynchro/dessinsanimes.csv"));
-            put("films", new ClassPathResource("fichiersSynchro/films.csv"));
-            put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));*/
+            //put("chansons", new ClassPathResource("fichiersSynchro/chansons.csv"));
+            //put("dessinsanimes", new ClassPathResource("fichiersSynchro/dessinsanimes.csv"));
+            //put("films", new ClassPathResource("fichiersSynchro/films.csv"));
+            //put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));
             put("jeux", new ClassPathResource("fichiersSynchro/jeux.csv"));
-            /*put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
-            put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
-            put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
-            put("sagas", new ClassPathResource("fichiersSynchro/sagas.csv"));
-            put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
-            put("series", new ClassPathResource("fichiersSynchro/series.csv"));
-            put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
-            put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));*/
+            //put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
+            //put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
+            //put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
+            put("sagas", new ClassPathResource("fichiersSynchro/saga.csv"));
+            //put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
+            //put("series", new ClassPathResource("fichiersSynchro/series.csv"));
+            //put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
+            //put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));
         }};
 
         for(Map.Entry<String, Resource> entry : hm.entrySet()) {
@@ -99,11 +113,11 @@ public class UserService implements UserDetailsService {
 
             if(nom.matches("jeux|rappeurs|sports")) {
                 this.insertTwoDatas(file);
-            } else if ("chansons|mechants|superheros".matches(nom)) {
+            } else if (nom.matches("chansons|mechants|superheros")) {
                 this.insertThreeDatas(file);
-            } else if ("acteurs|actrices|avengers|sagas|series|seriesanimes".matches(nom)) {
+            } else if (nom.matches("acteurs|actrices|avengers|sagas|series|seriesanimes")) {
                 this.insertFourDatas(file);
-            } else if ("dessinsanimes|realisateurs".matches(nom)) {
+            } else if (nom.matches("dessinsanimes|realisateurs")) {
                 this.insertFiveDatas(file);
             } else {
                 this.insertSixDatas(file);
@@ -118,103 +132,204 @@ public class UserService implements UserDetailsService {
     private void insertFiveDatas(File file) {
     }
 
+
+    //acteurs actrices avengers sagas series seriesanimes
     private void insertFourDatas(File file) {
-    }
-
-    private void insertThreeDatas(File file) {
-    }
-
-    private void insertTwoDatas(File file) {
 
         try {
 
-            Scanner myReader = new Scanner(file);
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
 
-            System.out.println(myReader.hasNextLine());
+                // use comma as separator
+                String[] liste = line.split(cvsSplitBy);
 
-            while (myReader.hasNextLine()) {
+                if (!liste[1].matches("Nom")) {
+                    if (file.getName().contains("acteurs")) {
 
-                String data = myReader.nextLine();
-                List<String> list = Arrays.asList(data.split(";"));
+                        Optional<Acteurs> isExiste = acteursRepository.findById(Long.parseLong(liste[0]));
 
-                if(!list.get(0).matches("Nom")) {
-                    if(file.getName().contains("jeux")) {
+                        if(!isExiste.isPresent()) {
+                            Acteurs acteur = new Acteurs();
+                            acteur.setId(Long.parseLong(liste[0]));
+                            acteur.setNom(liste[1]);
 
-                        Jeux jeu = new Jeux();
-                        jeu.setNom(list.get(0));
+                            try {
+                                acteur.setImage(liste[2]);
+                            } catch (Exception e) {
+                                acteur.setImage(null);
+                            }
 
-                        if(list.get(1).isEmpty() || list.get(1).equals("")) {
-                            String image = (list.get(0).toLowerCase().replace(" ", "")) + ".png";
-                            jeu.setImage(image);
+                            acteur.setColonne1(liste[3].trim());
+                            acteur.setColonne2(liste[4].trim());
+
+                            acteursRepository.save(acteur);
+
                         } else {
-                            jeu.setImage(list.get(1));
+                            logger.log(Level.INFO, "ACTEUR TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
-                        jeuxRepository.save(jeu);
+                    }
 
-                    } else if (file.getName().contains("rappeurs")) {
+                    else if (file.getName().contains("actrices")) {
 
+                        Optional<Actrices> isExiste = actricesRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Actrices actrice = new Actrices();
+                            actrice.setId(Long.parseLong(liste[0]));
+                            actrice.setNom(liste[1]);
+
+                            try {
+                                actrice.setImage(liste[2]);
+                            } catch (Exception e) {
+                                actrice.setImage(null);
+                            }
+
+                            actrice.setColonne1(liste[3].trim());
+                            actrice.setColonne2(liste[4].trim());
+
+                            actricesRepository.save(actrice);
+
+                        } else {
+                            logger.log(Level.INFO, "ACTRICE TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
+
+                    }
+
+                    else if (file.getName().contains("avengers")) {
+                        Optional<Avengers> isExiste = avengersRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Avengers avenger = new Avengers();
+                            avenger.setId(Long.parseLong(liste[0]));
+                            avenger.setNom(liste[1]);
+
+                            try {
+                                avenger.setImage(liste[2]);
+                            } catch (Exception e) {
+                                avenger.setImage(null);
+                            }
+
+                            avenger.setColonne1(liste[3].trim());
+                            avenger.setColonne2(liste[4].trim());
+
+                            avengersRepository.save(avenger);
+
+                        } else {
+                            logger.log(Level.INFO, "AVENGER TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
+
+                    }
+
+                    else if (file.getName().contains("saga")) {
+
+                        Optional<Saga> isExiste = sagaRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Saga saga = new Saga();
+                            saga.setId(Long.parseLong(liste[0]));
+                            saga.setNom(liste[1]);
+
+                            try {
+                                saga.setImage(liste[2]);
+                            } catch (Exception e) {
+                                saga.setImage(null);
+                            }
+
+                            saga.setColonne1(liste[3].trim());
+                            saga.setColonne2(liste[4].trim());
+
+                            sagaRepository.save(saga);
+
+                        } else {
+                            logger.log(Level.INFO, "SAGA TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
+
+                    } else if (file.getName().contains("series")) {
 
 
                     } else {
 
 
-
                     }
-                }
-
-                /*if(list.get(0).matches("Nom")) {
-
-                    String nom = listeActeurs.get(0);
-                    int longueur = listeActeurs.get(0).split(" ").length;
-                    String image = listeActeurs.get(0).split(" ")[longueur-2].toLowerCase() + listeActeurs.get(0).split(" ")[longueur-1].toLowerCase();
-                    String film1 = listeActeurs.get(1);
-                    String film2 = listeActeurs.get(2);
-
-                }*/
-
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-
-    private void lectureData(String key, Resource value) throws IOException {
-
-        /*try {
-
-            Scanner myReader = new Scanner(file);
-            while (myReader.hasNextLine()) {
-
-                String data = myReader.nextLine();
-                List<String> listeActeurs = Arrays.asList(data.split(";"));
-
-
-                if(listeActeurs.size()==3 && !listeActeurs.get(0).matches("Nom")) {
-
-                    String nom = listeActeurs.get(0);
-                    int longueur = listeActeurs.get(0).split(" ").length;
-                    String image = listeActeurs.get(0).split(" ")[longueur-2].toLowerCase() + listeActeurs.get(0).split(" ")[longueur-1].toLowerCase();
-                    String film1 = listeActeurs.get(1);
-                    String film2 = listeActeurs.get(2);
-
-                    Acteurs acteur = new Acteurs();
-                    acteur.setNom(nom);
-                    acteur.setImage("acteurs/" + image + ".png");
-                    /*acteur.setFilm1(film1);
-                    acteur.setFilm2(film2);
-
-                    listeBDD.add(acteur);
-
                 }
 
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
+
+    private void insertThreeDatas(File file) {
+    }
+
+    //JEUX - RAPPEURS - SPORTS
+    private void insertTwoDatas(File file) {
+
+        try {
+
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] liste = line.split(cvsSplitBy);
+
+                if (!liste[1].matches("Nom")) {
+                    if (file.getName().contains("jeux")) {
+
+                        Optional<Jeux> isExiste = jeuxRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Jeux jeu = new Jeux();
+                            jeu.setId(Long.parseLong(liste[0]));
+                            jeu.setNom(liste[1]);
+
+                            try {
+                                jeu.setImage(liste[2]);
+                            } catch (Exception e) {
+                                jeu.setImage(null);
+                            }
+
+                            jeuxRepository.save(jeu);
+                        } else {
+                            logger.log(Level.INFO, "JEU TROUVE " + isExiste.map(DeuxColonnes::getNom));
+                        }
+
+                    } else if (file.getName().contains("rappeurs")) {
+
+
+                    } else {
+
+
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
 
 }

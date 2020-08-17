@@ -1,33 +1,33 @@
-Nom;Image
-Red Dead Redemption;
-The Legend of Zelda;
-Fifa;
-The Last of Us;
-Pokemon;
-Halo;
-Call of Duty;
-Fortnite;
-Assassin?s creed;
-The Witcher;
-Kingdom Hearts;
-Uncharted;
-League of Legends;
-Rainbox Six;
-World of Warcraft;
-Mario Kart;
-The Elder Scrolls;
-Counter-Strike;
-Portal;
-Super Mario;
-Overwatch;
-Dofus;
-Final Fantasy;
-Battlefield;
-Minecraft;
-God Of War;
-Fallout;
-Life is Strange;
-GTA;
-Super Smash Bros;
-Undertale;
-Rocker League;
+ID;Nom;Image
+1;Assassins Creeds;assassins.jpg
+2;Battlefield;bf.png
+3;Call of Duty;cod.jpg
+4;Counter-Strike;csgo.png
+5;Dofus;dofus.png
+6;Fallout;fallout.png
+7;Fifa;fifa.jpg
+8;Final Fantasy;final.png
+9;Fortnite;fortnite.png
+10;God Of War;god.png
+11;GTA;gta.png
+12;Halo;halo.png
+13;Kingdom Hearts;kingdom.png
+14;League of Legends;lol.png
+15;Life is Strange;life.png
+16;Mario Kart;mario.jpg
+17;Minecraft;minecraft.png
+18;Overwatch;overwatch.png
+19;Pokemon;pokemon.png
+20;Portal;portal.png
+21;Rainbox Six;r6.png
+22;Red Dead Redemption;read.jpeg
+23;Rocker League;rocket.png
+24;Super Mario;elder.png
+25;Super Smash Bros;super.png
+26;The Elder Scrolls;elder.png
+27;The Last of Us;last.jpg
+28;The Legend of Zelda;zelda.jpg
+29;The Witcher;witcher.png
+30;Uncharted;uncharted.png
+31;Undertale;undertale.png
+32;World of Warcraft;wow.jpeg
