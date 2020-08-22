@@ -8,6 +8,8 @@ import com.example.maxime.dto.UserDto;
 import com.example.maxime.entities.*;
 import com.example.maxime.models.DeuxColonnes;
 import com.example.maxime.models.QuatreColonnes;
+import com.example.maxime.models.SixColonnes;
+import com.example.maxime.models.TroisColonnes;
 import com.example.maxime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,14 +30,12 @@ import java.util.logging.Logger;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepo;
-
-    @Autowired
     GenericConverter<User, UserDto> userConverter;
 
     @Autowired
     JeuxRepository jeuxRepository;
-
+    @Autowired
+    UserRepository userRepo;
     @Autowired
     ActeursRepository acteursRepository;
     @Autowired
@@ -44,6 +44,18 @@ public class UserService implements UserDetailsService {
     AvengersRepository avengersRepository;
     @Autowired
     SagaRepository sagaRepository;
+    @Autowired
+    SeriesRepository seriesRepository;
+    @Autowired
+    SeriesAnimesRepository seriesAnimesRepository;
+    @Autowired
+    RappeursRepository rappeursRepository;
+    @Autowired
+    MechantsRepository mechantsRepository;
+    @Autowired
+    SportsRepository sportsRepository;
+    @Autowired
+    FilmsRepository filmsRepository;
 
     Logger logger = Logger.getLogger("logger");
 
@@ -88,16 +100,16 @@ public class UserService implements UserDetailsService {
             put("avengers", new ClassPathResource("fichiersSynchro/avengers.csv"));
             //put("chansons", new ClassPathResource("fichiersSynchro/chansons.csv"));
             //put("dessinsanimes", new ClassPathResource("fichiersSynchro/dessinsanimes.csv"));
-            //put("films", new ClassPathResource("fichiersSynchro/films.csv"));
+            put("films", new ClassPathResource("fichiersSynchro/films.csv"));
             //put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));
             put("jeux", new ClassPathResource("fichiersSynchro/jeux.csv"));
-            //put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
-            //put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
+            put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
+            put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
             //put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
             put("sagas", new ClassPathResource("fichiersSynchro/saga.csv"));
-            //put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
-            //put("series", new ClassPathResource("fichiersSynchro/series.csv"));
-            //put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
+            put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
+            put("series", new ClassPathResource("fichiersSynchro/series.csv"));
+            put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
             //put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));
         }};
 
@@ -127,6 +139,83 @@ public class UserService implements UserDetailsService {
     }
 
     private void insertSixDatas(File file) {
+
+        try {
+
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] liste = line.split(cvsSplitBy);
+
+                if (!liste[1].matches("Nom")) {
+                    if (file.getName().contains("films")) {
+
+                        Optional<Films> isExiste = filmsRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Films film = new Films();
+                            film.setId(Long.parseLong(liste[0]));
+                            film.setNom(liste[1]);
+
+                            try {
+                                film.setImage(liste[2]);
+                            } catch (Exception e) {
+                                film.setImage(null);
+                            }
+
+                            film.setColonne1(liste[3]);
+                            film.setColonne2(liste[4]);
+                            film.setColonne3(liste[5]);
+                            film.setColonne4(liste[6]);
+
+                            filmsRepository.save(film);
+                        } else {
+                            logger.log(Level.INFO, "FILM TROUVE " + isExiste.map(SixColonnes::getNom));
+                        }
+
+                    } else if (file.getName().contains("mechants")) {
+
+                        Optional<Mechants> isExiste = mechantsRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Mechants mechant = new Mechants();
+                            mechant.setId(Long.parseLong(liste[0]));
+                            mechant.setNom(liste[1]);
+
+                            try {
+                                mechant.setImage(liste[2]);
+                            } catch (Exception e) {
+                                mechant.setImage(null);
+                            }
+                            mechant.setColonne1(liste[3]);
+
+                            mechantsRepository.save(mechant);
+                        } else {
+                            logger.log(Level.INFO, "MECHANT TROUVE " + isExiste.map(TroisColonnes::getNom));
+                        }
+
+                    } else {
+
+
+
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     private void insertFiveDatas(File file) {
@@ -135,6 +224,8 @@ public class UserService implements UserDetailsService {
 
     //acteurs actrices avengers sagas series seriesanimes
     private void insertFourDatas(File file) {
+
+        logger.info(file.getName() + " --> " + file.getName().equals("seriesanimes.csv"));
 
         try {
 
@@ -237,6 +328,8 @@ public class UserService implements UserDetailsService {
                                 saga.setImage(null);
                             }
 
+                            logger.info(String.valueOf(liste[4].length()));
+
                             saga.setColonne1(liste[3].trim());
                             saga.setColonne2(liste[4].trim());
 
@@ -246,11 +339,63 @@ public class UserService implements UserDetailsService {
                             logger.log(Level.INFO, "SAGA TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
-                    } else if (file.getName().contains("series")) {
+                    }
 
+                    else if (file.getName().matches("series")) {
 
-                    } else {
+                        Optional<Series> isExiste = seriesRepository.findById(Long.parseLong(liste[0]));
 
+                        if(!isExiste.isPresent()) {
+
+                            Series serie = new Series();
+                            serie.setId(Long.parseLong(liste[0]));
+
+                            serie.setNom(liste[1]);
+
+                            try {
+                                serie.setImage(liste[2]);
+                            } catch (Exception e) {
+                                serie.setImage(null);
+                            }
+
+                            logger.info(String.valueOf(liste[4].length()));
+
+                            serie.setColonne1(liste[3].trim());
+                            serie.setColonne2(liste[4].trim());
+
+                            seriesRepository.save(serie);
+
+                        } else {
+                            logger.log(Level.INFO, "SERIE TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
+
+                    }
+
+                    else if (file.getName().equals("seriesanimes.csv")){
+
+                        Optional<SeriesAnimes> isExiste = seriesAnimesRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+
+                            SeriesAnimes serieAnime = new SeriesAnimes();
+                            serieAnime.setId(Long.parseLong(liste[0]));
+
+                            serieAnime.setNom(liste[1]);
+
+                            try {
+                                serieAnime.setImage(liste[2]);
+                            } catch (Exception e) {
+                                serieAnime.setImage(null);
+                            }
+
+                            serieAnime.setColonne1(liste[3].trim());
+                            serieAnime.setColonne2(liste[4].trim());
+
+                            seriesAnimesRepository.save(serieAnime);
+
+                        } else {
+                            logger.log(Level.INFO, "SERIE ANIME TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
 
                     }
                 }
@@ -271,7 +416,80 @@ public class UserService implements UserDetailsService {
 
     }
 
+    //chansons mechants superheros
     private void insertThreeDatas(File file) {
+
+        try {
+
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] liste = line.split(cvsSplitBy);
+
+                if (!liste[1].matches("Nom")) {
+                    if (file.getName().contains("chansons")) {
+
+                        /*Optional<Jeux> isExiste = jeuxRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Jeux jeu = new Jeux();
+                            jeu.setId(Long.parseLong(liste[0]));
+                            jeu.setNom(liste[1]);
+
+                            try {
+                                jeu.setImage(liste[2]);
+                            } catch (Exception e) {
+                                jeu.setImage(null);
+                            }
+
+                            jeuxRepository.save(jeu);
+                        } else {
+                            logger.log(Level.INFO, "JEU TROUVE " + isExiste.map(DeuxColonnes::getNom));
+                        }*/
+
+                    } else if (file.getName().contains("mechants")) {
+
+                        Optional<Mechants> isExiste = mechantsRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Mechants mechant = new Mechants();
+                            mechant.setId(Long.parseLong(liste[0]));
+                            mechant.setNom(liste[1]);
+
+                            try {
+                                mechant.setImage(liste[2]);
+                            } catch (Exception e) {
+                                mechant.setImage(null);
+                            }
+                            mechant.setColonne1(liste[3]);
+
+                            mechantsRepository.save(mechant);
+                        } else {
+                            logger.log(Level.INFO, "MECHANT TROUVE " + isExiste.map(TroisColonnes::getNom));
+                        }
+
+                    } else {
+
+
+
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     //JEUX - RAPPEURS - SPORTS
@@ -308,9 +526,44 @@ public class UserService implements UserDetailsService {
 
                     } else if (file.getName().contains("rappeurs")) {
 
+                        Optional<Rappeurs> isExiste = rappeursRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Rappeurs rappeurs = new Rappeurs();
+                            rappeurs.setId(Long.parseLong(liste[0]));
+                            rappeurs.setNom(liste[1]);
+
+                            try {
+                                rappeurs.setImage(liste[2]);
+                            } catch (Exception e) {
+                                rappeurs.setImage(null);
+                            }
+
+                            rappeursRepository.save(rappeurs);
+                        } else {
+                            logger.log(Level.INFO, "RAPPEUR TROUVE " + isExiste.map(DeuxColonnes::getNom));
+                        }
 
                     } else {
 
+                        Optional<Sports> isExiste = sportsRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Sports sport = new Sports();
+                            sport.setId(Long.parseLong(liste[0]));
+                            sport.setNom(liste[1]);
+
+                            try {
+                                sport.setImage(liste[2]);
+                            } catch (Exception e) {
+                                sport.setImage(null);
+                            }
+
+                            sportsRepository.save(sport);
+                            logger.log(Level.INFO, "SPORT AJOUTE " + sport.getNom());
+                        } else {
+                            logger.log(Level.INFO, "SPORT TROUVE " + isExiste.map(DeuxColonnes::getNom));
+                        }
 
                     }
                 }
