@@ -6,10 +6,7 @@ import com.example.maxime.dto.RappeursDto;
 import com.example.maxime.dto.SportsDto;
 import com.example.maxime.dto.UserDto;
 import com.example.maxime.entities.*;
-import com.example.maxime.models.DeuxColonnes;
-import com.example.maxime.models.QuatreColonnes;
-import com.example.maxime.models.SixColonnes;
-import com.example.maxime.models.TroisColonnes;
+import com.example.maxime.models.*;
 import com.example.maxime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -56,6 +53,16 @@ public class UserService implements UserDetailsService {
     SportsRepository sportsRepository;
     @Autowired
     FilmsRepository filmsRepository;
+    @Autowired
+    RealisateurRepository realisateurRepository;
+    @Autowired
+    DessinsAnimesRepository dessinsAnimesRepository;
+    @Autowired
+    ChansonsRepository chansonsRepository;
+    @Autowired
+    SuperHerosRepository superHerosRepository;
+    @Autowired
+    HorreurRepository horreurRepository;
 
     Logger logger = Logger.getLogger("logger");
 
@@ -101,11 +108,11 @@ public class UserService implements UserDetailsService {
             //put("chansons", new ClassPathResource("fichiersSynchro/chansons.csv"));
             //put("dessinsanimes", new ClassPathResource("fichiersSynchro/dessinsanimes.csv"));
             put("films", new ClassPathResource("fichiersSynchro/films.csv"));
-            //put("horreurs", new ClassPathResource("fichiersSynchro/horreurs.csv"));
+            put("horreurs", new ClassPathResource("fichiersSynchro/horreur.csv"));
             put("jeux", new ClassPathResource("fichiersSynchro/jeux.csv"));
             put("mechants", new ClassPathResource("fichiersSynchro/mechants.csv"));
             put("rappeurs", new ClassPathResource("fichiersSynchro/rappeurs.csv"));
-            //put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
+            put("realisateurs", new ClassPathResource("fichiersSynchro/realisateurs.csv"));
             put("sagas", new ClassPathResource("fichiersSynchro/saga.csv"));
             put("seriesanimes", new ClassPathResource("fichiersSynchro/seriesanimes.csv"));
             put("series", new ClassPathResource("fichiersSynchro/series.csv"));
@@ -138,6 +145,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    //FILMS HORREURS
     private void insertSixDatas(File file) {
 
         try {
@@ -176,28 +184,28 @@ public class UserService implements UserDetailsService {
 
                     } else if (file.getName().contains("mechants")) {
 
-                        Optional<Mechants> isExiste = mechantsRepository.findById(Long.parseLong(liste[0]));
+                        Optional<Horreur> isExiste = horreurRepository.findById(Long.parseLong(liste[0]));
 
                         if(!isExiste.isPresent()) {
-                            Mechants mechant = new Mechants();
-                            mechant.setId(Long.parseLong(liste[0]));
-                            mechant.setNom(liste[1]);
+                            Horreur horreur = new Horreur();
+                            horreur.setId(Long.parseLong(liste[0]));
+                            horreur.setNom(liste[1]);
 
                             try {
-                                mechant.setImage(liste[2]);
+                                horreur.setImage(liste[2]);
                             } catch (Exception e) {
-                                mechant.setImage(null);
+                                horreur.setImage(null);
                             }
-                            mechant.setColonne1(liste[3]);
 
-                            mechantsRepository.save(mechant);
+                            horreur.setColonne1(liste[3]);
+                            horreur.setColonne2(liste[4]);
+                            horreur.setColonne3(liste[5]);
+                            horreur.setColonne4(liste[6]);
+
+                            horreurRepository.save(horreur);
                         } else {
-                            logger.log(Level.INFO, "MECHANT TROUVE " + isExiste.map(TroisColonnes::getNom));
+                            logger.log(Level.INFO, "HORREUR TROUVE " + isExiste.map(SixColonnes::getNom));
                         }
-
-                    } else {
-
-
 
                     }
                 }
@@ -218,9 +226,83 @@ public class UserService implements UserDetailsService {
 
     }
 
+    //dessins animes realisateurs
     private void insertFiveDatas(File file) {
-    }
 
+        try {
+
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] liste = line.split(cvsSplitBy);
+
+                if (!liste[1].matches("Nom")) {
+                    if (file.getName().contains("realisateurs")) {
+
+                        Optional<Realisateur> isExiste = realisateurRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Realisateur realisateur = new Realisateur();
+                            realisateur.setId(Long.parseLong(liste[0]));
+                            realisateur.setNom(liste[1]);
+
+                            try {
+                                realisateur.setImage(liste[2]);
+                            } catch (Exception e) {
+                                realisateur.setImage(null);
+                            }
+
+                            realisateur.setColonne1(liste[3]);
+                            realisateur.setColonne2(liste[4]);
+                            realisateur.setColonne3(liste[5]);
+
+                            realisateurRepository.save(realisateur);
+                        } else {
+                            logger.log(Level.INFO, "REALISATEUR TROUVE " + isExiste.map(CinqColonnes::getNom));
+                        }
+
+                    } else if (file.getName().contains("dessinsanimes")) {
+
+                        Optional<DessinsAnimes> isExiste = dessinsAnimesRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            DessinsAnimes dessinsAnimes = new DessinsAnimes();
+                            dessinsAnimes.setId(Long.parseLong(liste[0]));
+                            dessinsAnimes.setNom(liste[1]);
+
+                            try {
+                                dessinsAnimes.setImage(liste[2]);
+                            } catch (Exception e) {
+                                dessinsAnimes.setImage(null);
+                            }
+                            dessinsAnimes.setColonne1(liste[3]);
+                            dessinsAnimes.setColonne2(liste[4]);
+                            dessinsAnimes.setColonne3(liste[5]);
+
+                            dessinsAnimesRepository.save(dessinsAnimes);
+                        } else {
+                            logger.log(Level.INFO, "DESSIN ANIME TROUVE " + isExiste.map(CinqColonnes::getNom));
+                        }
+
+                    }
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
 
     //acteurs actrices avengers sagas series seriesanimes
     private void insertFourDatas(File file) {
@@ -430,23 +512,23 @@ public class UserService implements UserDetailsService {
                 if (!liste[1].matches("Nom")) {
                     if (file.getName().contains("chansons")) {
 
-                        /*Optional<Jeux> isExiste = jeuxRepository.findById(Long.parseLong(liste[0]));
+                        Optional<Chansons> isExiste = chansonsRepository.findById(Long.parseLong(liste[0]));
 
                         if(!isExiste.isPresent()) {
-                            Jeux jeu = new Jeux();
-                            jeu.setId(Long.parseLong(liste[0]));
-                            jeu.setNom(liste[1]);
+                            Chansons chanson = new Chansons();
+                            chanson.setId(Long.parseLong(liste[0]));
+                            chanson.setNom(liste[1]);
 
                             try {
-                                jeu.setImage(liste[2]);
+                                chanson.setImage(liste[2]);
                             } catch (Exception e) {
-                                jeu.setImage(null);
+                                chanson.setImage(null);
                             }
 
-                            jeuxRepository.save(jeu);
+                            chansonsRepository.save(chanson);
                         } else {
-                            logger.log(Level.INFO, "JEU TROUVE " + isExiste.map(DeuxColonnes::getNom));
-                        }*/
+                            logger.log(Level.INFO, "CHANSON TROUVE " + isExiste.map(TroisColonnes::getNom));
+                        }
 
                     } else if (file.getName().contains("mechants")) {
 
@@ -471,7 +553,24 @@ public class UserService implements UserDetailsService {
 
                     } else {
 
+                        Optional<SuperHeros> isExiste = superHerosRepository.findById(Long.parseLong(liste[0]));
 
+                        if(!isExiste.isPresent()) {
+                            SuperHeros superHeros = new SuperHeros();
+                            superHeros.setId(Long.parseLong(liste[0]));
+                            superHeros.setNom(liste[1]);
+
+                            try {
+                                superHeros.setImage(liste[2]);
+                            } catch (Exception e) {
+                                superHeros.setImage(null);
+                            }
+                            superHeros.setColonne1(liste[3]);
+
+                            superHerosRepository.save(superHeros);
+                        } else {
+                            logger.log(Level.INFO, "SUPER HEROS TROUVE " + isExiste.map(TroisColonnes::getNom));
+                        }
 
                     }
                 }
