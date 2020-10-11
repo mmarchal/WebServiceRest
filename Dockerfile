@@ -1,5 +1,7 @@
 FROM openjdk:8-jdk
 
+RUN git pull
+
 RUN apt-get update && apt-get install maven -y
 
 RUN mkdir /app
