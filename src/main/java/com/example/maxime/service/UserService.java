@@ -9,16 +9,16 @@ import com.example.maxime.entities.*;
 import com.example.maxime.models.*;
 import com.example.maxime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.apache.commons.io.FileUtils;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,9 +99,11 @@ public class UserService implements UserDetailsService {
         return this.userRepo.allNames();
     }
 
-    public void synchro() {
+    public void synchro() throws MalformedURLException {
 
-        Map<String, Resource> hm  = new HashMap<String, Resource>() {{
+        String basiqueURL = "http://maxdonnees.alwaysdata.net/datafiles/";
+
+        /*Map<String, Resource> hm  = new HashMap<String, Resource>() {{
             put("acteurs", new ClassPathResource("fichiersSynchro/acteurs.csv"));
             put("actrices", new ClassPathResource("fichiersSynchro/actrices.csv"));
             put("avengers", new ClassPathResource("fichiersSynchro/avengers.csv"));
@@ -118,15 +120,34 @@ public class UserService implements UserDetailsService {
             put("series", new ClassPathResource("fichiersSynchro/series.csv"));
             put("sports", new ClassPathResource("fichiersSynchro/sports.csv"));
             //put("superheros", new ClassPathResource("fichiersSynchro/superheros.csv"));
+        }};*/
+
+        Map<String, URL> hm  = new HashMap<String, URL>() {{
+            put("acteurs", new URL(basiqueURL + "acteurs.csv"));
+            put("actrices", new URL(basiqueURL + "actrices.csv"));
+            put("avengers", new URL(basiqueURL + "avengers.csv"));
+            //put("chansons", new URL(basiqueURL + "chansons.csv"));
+            //put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
+            put("films", new URL(basiqueURL + "films.csv"));
+            put("horreurs", new URL(basiqueURL + "horreur.csv"));
+            put("jeux", new URL(basiqueURL + "jeux.csv"));
+            put("mechants", new URL(basiqueURL + "mechants.csv"));
+            put("rappeurs", new URL(basiqueURL + "rappeurs.csv"));
+            put("realisateurs", new URL(basiqueURL + "realisateurs.csv"));
+            put("sagas", new URL(basiqueURL + "saga.csv"));
+            put("seriesanimes", new URL(basiqueURL + "seriesanimes.csv"));
+            put("series", new URL(basiqueURL + "series.csv"));
+            put("sports", new URL(basiqueURL + "sports.csv"));
+            //put("superheros", new URL(basiqueURL + "superheros.csv"));
         }};
 
-        for(Map.Entry<String, Resource> entry : hm.entrySet()) {
+        for(Map.Entry<String, URL> entry : hm.entrySet()) {
 
             String nom = entry.getKey();
             File file = new File("");
             try {
-                file = entry.getValue().getFile();
-                getClass().getResourceAsStream(entry.getValue().getFilename());
+                //file = entry.getValue().getFile();
+                FileUtils.copyURLToFile(entry.getValue(), file);
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
