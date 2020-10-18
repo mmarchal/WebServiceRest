@@ -126,9 +126,11 @@ public class UserService implements UserDetailsService {
             File file = new File("");
             try {
                 file = entry.getValue().getFile();
+                getClass().getResourceAsStream(entry.getValue().getFilename());
             } catch (Exception e1) {
                 System.out.println(e1.getMessage());
             }
+
 
             if(nom.matches("jeux|rappeurs|sports")) {
                 this.insertTwoDatas(file);
@@ -182,7 +184,7 @@ public class UserService implements UserDetailsService {
                             logger.log(Level.INFO, "FILM TROUVE " + isExiste.map(SixColonnes::getNom));
                         }
 
-                    } else if (file.getName().contains("mechants")) {
+                    } else if (file.getName().contains("horreur")) {
 
                         Optional<Horreur> isExiste = horreurRepository.findById(Long.parseLong(liste[0]));
 
@@ -254,8 +256,16 @@ public class UserService implements UserDetailsService {
                             }
 
                             realisateur.setColonne1(liste[3]);
-                            realisateur.setColonne2(liste[4]);
-                            realisateur.setColonne3(liste[5]);
+                            if (liste.length>=5) {
+                                realisateur.setColonne2(liste[4]);
+                            } else {
+                                realisateur.setColonne2("");
+                            }
+                            if (liste.length>=6) {
+                                realisateur.setColonne3(liste[5]);
+                            } else {
+                                realisateur.setColonne3("");
+                            }
 
                             realisateurRepository.save(realisateur);
                         } else {
