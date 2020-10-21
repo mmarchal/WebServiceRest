@@ -127,7 +127,7 @@ public class UserService implements UserDetailsService {
             put("actrices", new URL(basiqueURL + "actrices.csv"));
             put("avengers", new URL(basiqueURL + "avengers.csv"));
             //put("chansons", new URL(basiqueURL + "chansons.csv"));
-            //put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
+            put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
             put("films", new URL(basiqueURL + "films.csv"));
             put("horreurs", new URL(basiqueURL + "horreur.csv"));
             put("jeux", new URL(basiqueURL + "jeux.csv"));
