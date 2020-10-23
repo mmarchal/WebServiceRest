@@ -471,8 +471,16 @@ public class UserService implements UserDetailsService {
                                 dessinsAnimes.setImage(null);
                             }
                             dessinsAnimes.setColonne1(liste[3]);
-                            dessinsAnimes.setColonne2(liste[4]);
-                            dessinsAnimes.setColonne3(liste[5]);
+                            if (liste.length>=5) {
+                                dessinsAnimes.setColonne2(liste[4]);
+                            } else {
+                                dessinsAnimes.setColonne2("");
+                            }
+                            if (liste.length>=6) {
+                                dessinsAnimes.setColonne3(liste[5]);
+                            } else {
+                                dessinsAnimes.setColonne3("");
+                            }
 
                             dessinsAnimesRepository.save(dessinsAnimes);
                         } else {
