@@ -31,15 +31,4 @@ public class ActeursController {
         }
     }
 
-    @PostMapping(value = "/add")
-    public boolean insertOneActeur(@RequestBody ActeursDto acteur) {
-        try {
-            this.acteursService.insertData(acteur);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-    }
-
 }
