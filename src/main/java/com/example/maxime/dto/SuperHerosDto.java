@@ -1,16 +1,7 @@
 package com.example.maxime.dto;
 
+import com.example.maxime.modelsdto.TroisColonnesDto;
 import lombok.Data;
 
 @Data
-public class SuperHerosDto {
-
-    Long id;
-
-    String nom;
-
-    String image;
-
-    String pouvoir;
-
-}
+public class SuperHerosDto extends TroisColonnesDto {}

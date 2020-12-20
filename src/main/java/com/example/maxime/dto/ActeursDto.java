@@ -1,18 +1,7 @@
 package com.example.maxime.dto;
 
+import com.example.maxime.modelsdto.QuatreColonnesDto;
 import lombok.Data;
 
 @Data
-public class ActeursDto {
-
-    Long id;
-
-    String nom;
-
-    String image;
-
-    String film1;
-
-    String film2;
-
-}
+public class ActeursDto extends QuatreColonnesDto {}

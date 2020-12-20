@@ -1,19 +1,7 @@
 package com.example.maxime.dto;
 
+import com.example.maxime.modelsdto.CinqColonnesDto;
 import lombok.Data;
 
 @Data
-public class DessinsAnimesDto {
-
-    Long id;
-
-    String nom;
-
-    String image;
-
-    String annee;
-
-    String gentil;
-
-    String mechant;
-}
+public class DessinsAnimesDto extends CinqColonnesDto {}
