@@ -19,9 +19,12 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Service(value = "userService")
 public class UserService implements UserDetailsService {
@@ -117,7 +120,7 @@ public class UserService implements UserDetailsService {
             put("realisateurs", new URL(basiqueURL + "realisateurs.csv"));
             put("sagas", new URL(basiqueURL + "saga.csv"));
             put("seriesanimes", new URL(basiqueURL + "seriesanimes.csv"));
-            //put("series", new URL(basiqueURL + "series.csv"));
+            put("series", new URL(basiqueURL + "series.csv"));
             put("sports", new URL(basiqueURL + "sports.csv"));
             //put("superheros", new URL(basiqueURL + "superheros.csv"));
         }};
@@ -329,11 +332,13 @@ public class UserService implements UserDetailsService {
     }
 
     //FILMS HORREURS
-    private void insertSixDatas(URL url) {
+    private void insertSixDatas(URL url){
 
-        try (Scanner scnr = new Scanner(url.openStream())) {
-            while (scnr.hasNextLine()) {
-                String[] liste = scnr.nextLine().split(cvsSplitBy);
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8));
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] liste = str.split(cvsSplitBy);
 
                 if (!liste[0].equals("ID")) {
                     if (url.getPath().contains("films")) {
@@ -390,7 +395,6 @@ public class UserService implements UserDetailsService {
                 }
 
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -400,9 +404,11 @@ public class UserService implements UserDetailsService {
     //dessins animes realisateurs
     private void insertFiveDatas(URL url) {
 
-        try (Scanner scnr = new Scanner(url.openStream())) {
-            while (scnr.hasNextLine()) {
-                String[] liste = scnr.nextLine().split(cvsSplitBy);
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8));
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] liste = str.split(cvsSplitBy);
 
                 if (!liste[0].equals("ID")) {
                     if (url.getPath().contains("realisateurs")) {
@@ -482,9 +488,11 @@ public class UserService implements UserDetailsService {
     //acteurs actrices avengers sagas series seriesanimes
     private void insertFourDatas(URL url) {
 
-        try (Scanner scnr = new Scanner(url.openStream())) {
-            while (scnr.hasNextLine()) {
-                String[] liste = scnr.nextLine().split(cvsSplitBy);
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8));
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] liste = str.split(cvsSplitBy);
 
                 if (!liste[0].equals("ID")) {
                     if (url.getPath().contains("acteurs")) {
@@ -584,7 +592,7 @@ public class UserService implements UserDetailsService {
                             logger.log(Level.INFO, "SAGA TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
-                    } else if (url.getPath().matches("series")) {
+                    } else if (url.getPath().contains("series.csv")) {
 
                         Optional<Series> isExiste = seriesRepository.findById(Long.parseLong(liste[0]));
 
@@ -612,7 +620,7 @@ public class UserService implements UserDetailsService {
                             logger.log(Level.INFO, "SERIE TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
-                    } else if (url.getPath().equals("seriesanimes.csv")) {
+                    } else if (url.getPath().contains("seriesanimes")) {
 
                         Optional<SeriesAnimes> isExiste = seriesAnimesRepository.findById(Long.parseLong(liste[0]));
 
@@ -642,7 +650,7 @@ public class UserService implements UserDetailsService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.INFO, "URL : " + url.getPath() + " // ERREUR : " + e.getMessage());
         }
 
     }
@@ -650,9 +658,11 @@ public class UserService implements UserDetailsService {
     //chansons mechants superheros
     private void insertThreeDatas(URL url) {
 
-        try (Scanner scnr = new Scanner(url.openStream())) {
-            while (scnr.hasNextLine()) {
-                String[] liste = scnr.nextLine().split(cvsSplitBy);
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8));
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] liste = str.split(cvsSplitBy);
 
                 if (!liste[0].equals("ID")) {
                     if (url.getPath().contains("chansons")) {
@@ -731,9 +741,11 @@ public class UserService implements UserDetailsService {
     //JEUX - RAPPEURS - SPORTS
     private void insertTwoDatas(URL url) {
 
-        try (Scanner scnr = new Scanner(url.openStream())) {
-            while (scnr.hasNextLine()) {
-                String[] liste = scnr.nextLine().split(cvsSplitBy);
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8));
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] liste = str.split(cvsSplitBy);
 
                 if (!liste[0].equals("ID")) {
                     if (url.getPath().contains("jeux")) {
