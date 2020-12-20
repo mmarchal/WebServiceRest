@@ -30,17 +30,4 @@ public class ActeursService {
         return genericConverter.entitiesToDtos(acteursRepository.findAll(), ActeursDto.class);
     }
 
-    public void insertData(ActeursDto acteur) {
-
-        Acteurs a = new Acteurs();
-
-        a.setNom(acteur.getNom());
-        a.setImage(acteur.getImage());
-        a.setColonne1(acteur.getFilm1());
-        a.setColonne2(acteur.getFilm2());
-
-        this.acteursRepository.save(a);
-
-    }
-
 }
