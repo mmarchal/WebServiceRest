@@ -108,7 +108,7 @@ public class UserService implements UserDetailsService {
             put("actrices", new URL(basiqueURL + "actrices.csv"));
             put("avengers", new URL(basiqueURL + "avengers.csv"));
             //put("chansons", new URL(basiqueURL + "chansons.csv"));
-            //put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
+            put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
             put("films", new URL(basiqueURL + "films.csv"));
             put("horreurs", new URL(basiqueURL + "horreur.csv"));
             put("jeux", new URL(basiqueURL + "jeux.csv"));
@@ -452,8 +452,16 @@ public class UserService implements UserDetailsService {
                                 dessinsAnimes.setImage(null);
                             }
                             dessinsAnimes.setColonne1(liste[3]);
-                            dessinsAnimes.setColonne2(liste[4]);
-                            dessinsAnimes.setColonne3(liste[5]);
+                            if (liste.length>=5) {
+                                dessinsAnimes.setColonne2(liste[4]);
+                            } else {
+                                dessinsAnimes.setColonne2("");
+                            }
+                            if (liste.length>=6) {
+                                dessinsAnimes.setColonne3(liste[5]);
+                            } else {
+                                dessinsAnimes.setColonne3("");
+                            }
 
                             dessinsAnimesRepository.save(dessinsAnimes);
                         } else {
