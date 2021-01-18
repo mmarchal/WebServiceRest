@@ -5,9 +5,11 @@ import com.example.maxime.dto.DisneyDto;
 import com.example.maxime.entities.Disney;
 import com.example.maxime.repository.DisneyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
 public class DisneyService {
 
     @Autowired
