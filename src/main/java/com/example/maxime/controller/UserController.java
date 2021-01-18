@@ -4,8 +4,6 @@ import com.example.maxime.dto.UserDto;
 import com.example.maxime.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 

@@ -66,6 +66,8 @@ public class UserService implements UserDetailsService {
     SuperHerosRepository superHerosRepository;
     @Autowired
     HorreurRepository horreurRepository;
+    @Autowired
+    DisneyRepository disneyRepository;
 
     Logger logger = Logger.getLogger("logger");
 
@@ -112,6 +114,7 @@ public class UserService implements UserDetailsService {
             put("avengers", new URL(basiqueURL + "avengers.csv"));
             //put("chansons", new URL(basiqueURL + "chansons.csv"));
             put("dessinsanimes", new URL(basiqueURL + "dessinsanimes.csv"));
+            put("disney", new URL(basiqueURL + "disney.csv"));
             put("films", new URL(basiqueURL + "films.csv"));
             put("horreurs", new URL(basiqueURL + "horreur.csv"));
             put("jeux", new URL(basiqueURL + "jeux.csv"));
@@ -140,7 +143,7 @@ public class UserService implements UserDetailsService {
                 this.insertTwoDatas(entry.getValue());
             } else if (nom.matches("chansons|mechants|superheros")) {
                 this.insertThreeDatas(entry.getValue());
-            } else if (nom.matches("acteurs|actrices|avengers|sagas|series|seriesanimes")) {
+            } else if (nom.matches("acteurs|actrices|avengers|sagas|series|seriesanimes|disney")) {
                 this.insertFourDatas(entry.getValue());
             } else if (nom.matches("dessinsanimes|realisateurs")) {
                 this.insertFiveDatas(entry.getValue());
@@ -485,7 +488,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    //acteurs actrices avengers sagas series seriesanimes
+    //acteurs actrices avengers sagas series seriesanimes disney
     private void insertFourDatas(URL url) {
 
         try {
@@ -644,6 +647,32 @@ public class UserService implements UserDetailsService {
 
                         } else {
                             logger.log(Level.INFO, "SERIE ANIME TROUVE " + isExiste.map(QuatreColonnes::getNom));
+                        }
+
+                    } else if (url.getPath().contains("disney")) {
+
+                        Optional<Disney> isExiste = disneyRepository.findById(Long.parseLong(liste[0]));
+
+                        if (!isExiste.isPresent()) {
+
+                            Disney disney = new Disney();
+                            disney.setId(Long.parseLong(liste[0]));
+
+                            disney.setNom(liste[1]);
+
+                            try {
+                                disney.setImage(liste[2]);
+                            } catch (Exception e) {
+                                disney.setImage(null);
+                            }
+
+                            disney.setColonne1(liste[3].trim());
+                            disney.setColonne2(liste[4].trim());
+
+                            disneyRepository.save(disney);
+
+                        } else {
+                            logger.log(Level.INFO, "DISNEY TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
                     }
