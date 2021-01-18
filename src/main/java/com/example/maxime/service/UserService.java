@@ -649,7 +649,7 @@ public class UserService implements UserDetailsService {
                             logger.log(Level.INFO, "SERIE ANIME TROUVE " + isExiste.map(QuatreColonnes::getNom));
                         }
 
-                    } else if (url.getPath().contains("disney")) {
+                    } else if (url.getPath().contains("disney.csv")) {
 
                         Optional<Disney> isExiste = disneyRepository.findById(Long.parseLong(liste[0]));
 
