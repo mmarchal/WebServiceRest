@@ -68,6 +68,8 @@ public class UserService implements UserDetailsService {
     HorreurRepository horreurRepository;
     @Autowired
     DisneyRepository disneyRepository;
+    @Autowired
+    PokemonRepository pokemonRepository;
 
     Logger logger = Logger.getLogger("logger");
 
@@ -118,6 +120,7 @@ public class UserService implements UserDetailsService {
             put("films", new URL(basiqueURL + "films.csv"));
             put("horreurs", new URL(basiqueURL + "horreur.csv"));
             put("jeux", new URL(basiqueURL + "jeux.csv"));
+            put("pokemons", new URL(basiqueURL + "pokemons.csv"));
             put("mechants", new URL(basiqueURL + "mechants.csv"));
             put("rappeurs", new URL(basiqueURL + "rappeurs.csv"));
             put("realisateurs", new URL(basiqueURL + "realisateurs.csv"));
@@ -141,7 +144,7 @@ public class UserService implements UserDetailsService {
 
             if(nom.matches("jeux|rappeurs|sports")) {
                 this.insertTwoDatas(entry.getValue());
-            } else if (nom.matches("chansons|mechants|superheros")) {
+            } else if (nom.matches("chansons|mechants|superheros|pokemons")) {
                 this.insertThreeDatas(entry.getValue());
             } else if (nom.matches("acteurs|actrices|avengers|sagas|series|seriesanimes|disney")) {
                 this.insertFourDatas(entry.getValue());
@@ -684,7 +687,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    //chansons mechants superheros
+    //chansons mechants superheros pokemon
     private void insertThreeDatas(URL url) {
 
         try {
@@ -733,6 +736,27 @@ public class UserService implements UserDetailsService {
                             mechantsRepository.save(mechant);
                         } else {
                             logger.log(Level.INFO, "MECHANT TROUVE " + isExiste.map(TroisColonnes::getNom));
+                        }
+
+                    }  else if (url.getPath().contains("pokemons")) {
+
+                        Optional<Pokemon> isExiste = pokemonRepository.findById(Long.parseLong(liste[0]));
+
+                        if(!isExiste.isPresent()) {
+                            Pokemon pokemon = new Pokemon();
+                            pokemon.setId(Long.parseLong(liste[0]));
+                            pokemon.setNom(liste[1]);
+
+                            try {
+                                pokemon.setImage(liste[2]);
+                            } catch (Exception e) {
+                                pokemon.setImage(null);
+                            }
+                            pokemon.setColonne1(liste[3]);
+
+                            pokemonRepository.save(pokemon);
+                        } else {
+                            logger.log(Level.INFO, "POKEMON TROUVE " + isExiste.map(TroisColonnes::getNom));
                         }
 
                     } else {
